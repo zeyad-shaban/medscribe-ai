@@ -1,3 +1,4 @@
+"use client";
 import DashboardCard from "@/src/components/DashboardCard"
 import { useState } from "react";
 
