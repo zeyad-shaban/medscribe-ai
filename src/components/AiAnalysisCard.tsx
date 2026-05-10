@@ -14,7 +14,7 @@ export default function AiAnalysisCard() {
                 readOnly={true}
             />
 
-            {/* todo turn this to a proper  */}
+            {/* todo turn this to a proper markdown rendering and toggelable */}
             <label>Follow Up Mail</label>
             <textarea
                 className="block w-full rounded-md border-0 py-1.5 text-white/80 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-3"
