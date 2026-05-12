@@ -23,8 +23,7 @@ export async function POST(req: Request) {
         });
         return NextResponse.json(await response.json());
     } catch (err) {
-        console.log("Error calling Groq API: ", err)
-        console.error(err)
+        console.log("Error calling Groq API in /api/transcribe: ", err)
         return NextResponse.json({ error: "Failed to transcript audio" }, { status: 500 })
     }
 }

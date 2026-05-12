@@ -1,0 +1,6 @@
+{
+    "github.copilot.enable": {
+        "*": true,
+        "**/lib/*.prompts.ts": false,
+    }
+}
