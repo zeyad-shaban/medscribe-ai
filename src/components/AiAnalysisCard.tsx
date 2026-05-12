@@ -1,4 +1,5 @@
 import DashboardCard from "@/src/components/DashboardCard"
+import { useState } from "react";
 
 export default function AiAnalysisCard() {
     return (
