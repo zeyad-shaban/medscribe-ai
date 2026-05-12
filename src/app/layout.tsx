@@ -38,13 +38,13 @@ export default function RootLayout({
                 <div className="flex items-center gap-3">
                   <Show when="signed-out">
                     <SignInButton mode="modal">
-                      <button className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium hover:bg-white/10">
+                      <button className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium hover:bg-white/10 cursor-pointer">
                         Sign in
                       </button>
                     </SignInButton>
 
                     <SignUpButton mode="modal">
-                      <button className="rounded-full bg-violet-600 px-4 py-2 text-sm font-medium hover:bg-violet-500">
+                      <button className="rounded-full bg-violet-600 px-4 py-2 text-sm font-medium hover:bg-violet-500 cursor-pointer">
                         Sign up
                       </button>
                     </SignUpButton>
