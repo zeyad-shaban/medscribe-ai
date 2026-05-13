@@ -19,22 +19,25 @@ export const medicalPrompt = `
 
     --- OUTPUT JSON FORMAT ---
     {
-    "summary": {
-        "patient_reported_symptoms": "... (bulleted list in markdown)",
-        "doctor_findings_and_diagnosis": "... (what the doctor explicitly said the patient has/had)",
-        "prescribed_medicines": "... (list, or 'none mentioned')",
-        "next_actions_doctor_said": "... (e.g., lifestyle changes, follow‑up, tests ordered)"
-    },
-    "ai_insights": {
-        "disclaimer": "... (as above)",
-        "clinical_considerations": "... (only if transcript hints at a missed differential diagnosis or risk. Use format: 'Be careful: these symptoms have X% chance of being Y based on common presentations. Also consider Z if ...' Do NOT add this field unless you have a genuine reason.)",
-        "red_flags_or_escalation": "... (if any emergency symptoms or alarming patterns appear)"
-    },
-    "feedback_for_doctor": {
-        "communication_quality": "... (brief, constructive feedback on listening, clarity, safety netting, use of jargon, etc.)",
-        "suggestions_for_improvement": "... (specific, actionable, respectful)"
-    },
-    "follow_up_email_to_patient": "... (plain text, no markdown. Include: greeting, summary of what the doctor recommended, next steps, contact instructions for worsening symptoms. Tone: warm, clear, 6th‑grade reading level.)"
+        "summary": {
+            "patient_reported_symptoms": "... (bulleted list in markdown)",
+            "doctor_findings_and_diagnosis": "... (what the doctor explicitly said the patient has/had)",
+            "prescribed_medicines": "... (list, or 'none mentioned')",
+            "next_actions_doctor_said": "... (e.g., lifestyle changes, follow‑up, tests ordered)"
+        },
+        "ai_insights": {
+            "disclaimer": "... (as above)",
+            "clinical_considerations": "... (only if transcript hints at a missed differential diagnosis or risk. Use format: 'Be careful: these symptoms have X% chance of being Y based on common presentations. Also consider Z if ...' Do NOT add this field unless you have a genuine reason.)",
+            "red_flags_or_escalation": "... (if any emergency symptoms or alarming patterns appear)"
+        },
+        "feedback_for_doctor": {
+            "communication_quality": "... (brief, constructive feedback on listening, clarity, safety netting, use of jargon, etc.)",
+            "suggestions_for_improvement": "... (specific, actionable, respectful)"
+        },
+        "follow_up_email_to_patient": {
+            "subject": "... (short, clear subject line for the email, e.g., 'Follow‑up from your recent visit')",
+            "body": "... (HTML string, no markdown. Use <p>, <br>, <ul>, <li> for structure. Include: greeting, summary of doctor’s advice, next steps, contact instructions. Tone: warm, clear, 6th‑grade reading level. Wrap in <div> or just body content.)"
+        }
     }
 
     --- INSTRUCTIONS FOR EACH FIELD ---
@@ -55,13 +58,17 @@ export const medicalPrompt = `
     - Never be rude or purely negative.
 
     **follow_up_email_to_patient**  
-    - No markdown, but use line breaks for paragraphs.  
-    - Must include:  
+    - Includes "subject" (plain text) and "body" (HTML string).  
+    - Subject: concise, professional, e.g., "Follow‑up from your appointment".  
+    - body: valid HTML (no markdown). Must contain:  
     - Thanks for the visit.  
     - Recap of doctor’s advice (no AI opinions).  
     - When to call or return.  
-    - "This email is not a medical record – if you have questions, contact your doctor."
-
+    - "This email is not a medical record – if you have questions, contact your doctor."  
+    - Use HTML tags: <p> for paragraphs, <br> for line breaks, <ul>/<li> for lists if needed.  
+    - Keep inline styles minimal (e.g., no embedded CSS, just semantic HTML).  
+    - Example: "<p>Dear Patient,</p><p>Thank you for coming in...</p><p>Best regards,<br>Your healthcare team</p>"
+    
     --- INPUT (unlabeled transcript, may have typos) ---
 
     {{TRANSCRIPT}}

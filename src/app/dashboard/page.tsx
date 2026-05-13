@@ -13,26 +13,6 @@ import RecorderCard from "@/src/components/RecorderCard";
 export default function Dashboard() {
     const [transcript, setTranscript] = useState<string>("");
     const [analysis, setAnalysis] = useState<any>(null);
-    const [isAnalyzing, setIsAnalyzing] = useState(false);
-
-    const runAnalysis = async () => {
-        if (!transcript.trim()) return;
-        setIsAnalyzing(true);
-        try {
-            const res = await fetch("/api/ai_analysis", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ transcript }),
-            });
-            const data = await res.json();
-            setAnalysis(data); // now an object with all fields
-        } catch (error) {
-            console.error(error);
-            alert("Analysis failed");
-        } finally {
-            setIsAnalyzing(false);
-        }
-    };
 
     return (
         <main className="min-h-screen bg-zinc-950 text-white p-6">
@@ -47,8 +27,7 @@ export default function Dashboard() {
                         <TranscriptEditor
                             transcript={transcript}
                             setTranscript={setTranscript}
-                            onAnalyse={runAnalysis}
-                            isAnalyzing={isAnalyzing}
+                            setAnalysis={setAnalysis}
                         />
                     </div>
 
@@ -65,9 +44,9 @@ export default function Dashboard() {
                                     communicationQuality={analysis.feedback_for_doctor.communication_quality}
                                     suggestions={analysis.feedback_for_doctor.suggestions_for_improvement}
                                 />
-                                <FollowUpEmailCard emailBody={analysis.follow_up_email_to_patient} />
+                                <FollowUpEmailCard emailSubject={analysis.follow_up_email_to_patient.subject} emailBody={analysis.follow_up_email_to_patient.body} />
 
-                                <PatientEmailSender defaultEmailBody={analysis.follow_up_email_to_patient} />
+                                <PatientEmailSender emailSubject={analysis.follow_up_email_to_patient.subject} emailBody={analysis.follow_up_email_to_patient.body} />
                             </>
                         ) : (
                             <div className="rounded-2xl border border-white/20 bg-white/5 p-8 text-center text-gray-400">

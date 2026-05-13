@@ -2,19 +2,26 @@ import { useState } from "react";
 import DashboardCard from "@/src/components/DashboardCard";
 
 interface PatientEmailSenderProps {
-    defaultEmailBody: string;
+    emailSubject: string;
+    emailBody: string;
 }
 
-export default function PatientEmailSender({ defaultEmailBody }: PatientEmailSenderProps) {
+export default function PatientEmailSender({ emailSubject, emailBody }: PatientEmailSenderProps) {
     const [email, setEmail] = useState("");
     const [sending, setSending] = useState(false);
 
     const sendEmail = async () => {
         if (!email) return;
         setSending(true);
-        // call your /api/send-email endpoint with { to: email, body: defaultEmailBody }
-        await new Promise((r) => setTimeout(r, 1000)); // mock
-        alert("Email sent (demo)");
+        const response = await fetch("/api/send_email", {
+            method: "POST",
+            body: JSON.stringify({
+                email,
+                subject: emailSubject,
+                body: emailBody,
+            })
+        })
+
         setSending(false);
     };
 
