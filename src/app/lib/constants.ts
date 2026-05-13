@@ -1,1 +1,0 @@
-export const medicalModelName = "gemini-2.5-flash-lite"

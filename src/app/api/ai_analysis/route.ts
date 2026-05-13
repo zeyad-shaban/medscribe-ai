@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai"
 import { NextResponse } from "next/server";
-import { medicalModelName } from "@/src/app/lib/constants";
-import { medicalPrompt } from "@/src/app/lib/prompts";
+import { medicalModelName } from "@/src/lib/constants";
+import { medicalPrompt } from "@/src/lib/prompts";
 
 export async function POST(req: Request) {
     try {

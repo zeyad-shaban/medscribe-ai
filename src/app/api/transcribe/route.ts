@@ -1,3 +1,4 @@
+import { speechToTextModelName } from "@/src/lib/constants";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -9,7 +10,7 @@ export async function POST(req: Request) {
 
     const groqFormData = new FormData();
     groqFormData.append('file', file);
-    groqFormData.append('model', 'whisper-large-v3-turbo');
+    groqFormData.append('model', speechToTextModelName);
     groqFormData.append('response_format', 'json');
     groqFormData.append('language', 'en');
 
