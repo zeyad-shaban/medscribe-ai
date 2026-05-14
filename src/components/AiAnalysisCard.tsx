@@ -1,18 +1,14 @@
 import DashboardCard from "@/src/components/DashboardCard"
-import { useState } from "react";
 
-export default function AiAnalysisCard() {
+export default function AiAnalysisCard({ aiAnalysis }: { aiAnalysis: string }) {
     return (
         <DashboardCard title="AI Analysis">
-            {/* summarize teh conversation */}
-            {/* Tell what the doctor described to the patient */}
-            {/* Help the doctor see stuff he missed */}
-
             <label>AI Summary</label>
             <textarea
                 className="block w-full rounded-md border-0 py-1.5 text-white/80 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-3"
                 placeholder="AI Generated Summary and tips will appear here."
                 readOnly={true}
+                value={aiAnalysis}
             />
 
             {/* todo turn this to a proper markdown rendering and toggelable */}
