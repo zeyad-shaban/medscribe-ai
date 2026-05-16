@@ -1,8 +1,14 @@
 import io
+import numpy as np
+from scipy.io import wavfile
 import librosa
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import Depends, FastAPI, File, UploadFile, HTTPException
 from api.utils.audio_cleaning import denoise_audio, normalize_audio
+from api.config.settings import Settings, get_settings
+from api.config import constants
+from groq import Groq
 
+groq_client = Groq(api_key=get_settings().groq_secret_key)
 app = FastAPI()
 
 
@@ -17,27 +23,38 @@ async def process_and_transcribe(file: UploadFile = File(...)):
     print(f"File size: {len(audio_bytes)} bytes")
     if len(audio_bytes) == 0:
         raise HTTPException(400, "Empty file")
-    
-    print(f"First 20 bytes: {audio_bytes[:20]}")
 
     buffer = io.BytesIO(audio_bytes)
-
     waveform, sr = librosa.load(buffer, sr=None)
-    
+
     cleaned_audio = denoise_audio(waveform, sr)
-    cleaned_audio =  normalize_audio(cleaned_audio)
+    cleaned_audio = normalize_audio(cleaned_audio)
 
-    num_samples = len(waveform)
-    duration_seconds = num_samples / sr
-    
-    return "hello world!"
+    # prepare audio to be sent
+    audio_np = cleaned_audio.detach().cpu().numpy().squeeze()
+    audio_np = librosa.resample(audio_np, orig_sr=sr, target_sr=constants.GROQ_TARGET_SR)
+    audio_int16 = (audio_np * 32767).astype(np.int16)
 
-    # info =  {
-    #     "filename": file.filename,
-    #     "detected_sample_rate": sr,
-    #     "sample_count": num_samples,
-    #     "duration_seconds": round(duration_seconds, 2),
-    # }
+    export_buffer = io.BytesIO()
+    wavfile.write(export_buffer, constants.GROQ_TARGET_SR, audio_int16)
+    export_buffer.seek(0)
+
+    try:
+        transcription = groq_client.audio.transcriptions.create(
+            file=(file.filename, export_buffer.read()),
+            model=constants.GROQ_MODEL_NAME,
+            response_format="json",
+            language="en",
+        )
+        return {
+            "transcript": transcription.text,
+            "filename": file.filename,
+            "duration_seconds": round(len(waveform) / sr, 2),
+        }
+
+    except Exception as e:
+        print(f"Groq API Error: {e}")
+        raise HTTPException(500, f"Transcription failed: {str(e)}")
 
 
 if __name__ == "__main__":
