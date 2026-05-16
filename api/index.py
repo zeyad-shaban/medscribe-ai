@@ -1,7 +1,7 @@
-import numpy as np
 import io
 import librosa
 from fastapi import FastAPI, File, UploadFile, HTTPException
+from api.utils.audio_cleaning import denoise_audio, normalize_audio
 
 app = FastAPI()
 
@@ -22,23 +22,22 @@ async def process_and_transcribe(file: UploadFile = File(...)):
 
     buffer = io.BytesIO(audio_bytes)
 
-    waveform, sr = librosa.load(buffer, sr=None, mono=True, res_type='kaiser_fast')
-
+    waveform, sr = librosa.load(buffer, sr=None)
+    
+    cleaned_audio = denoise_audio(waveform, sr)
+    cleaned_audio =  normalize_audio(cleaned_audio)
 
     num_samples = len(waveform)
     duration_seconds = num_samples / sr
+    
+    return "hello world!"
 
-    print("--- Audio Payload Ingested ---")
-    print(f"Native Browser Sample Rate: {sr} Hz")
-    print(f"Total Discrete Samples: {num_samples}")
-    print(f"Calculated Duration: {duration_seconds:.2f} seconds")
-
-    return {
-        "filename": file.filename,
-        "detected_sample_rate": sr,
-        "sample_count": num_samples,
-        "duration_seconds": round(duration_seconds, 2),
-    }
+    # info =  {
+    #     "filename": file.filename,
+    #     "detected_sample_rate": sr,
+    #     "sample_count": num_samples,
+    #     "duration_seconds": round(duration_seconds, 2),
+    # }
 
 
 if __name__ == "__main__":
