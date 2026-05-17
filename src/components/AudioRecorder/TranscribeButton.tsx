@@ -23,7 +23,7 @@ export function TranscriptionButton({ audioBlob, onTranscribe, onError }: Transc
             const res = await fetch("/api/transcribe", { method: "POST", body: formData });
             const data = await res.json();
             if (!res.ok) throw new Error(data.error?.message || "Transcription failed");
-            onTranscribe(data.text);
+            onTranscribe(data.transcript);
         } catch (err) {
             onError(err instanceof Error ? err.message : "Unknown error");
         } finally {

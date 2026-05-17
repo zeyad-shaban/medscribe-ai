@@ -5,23 +5,15 @@ export async function POST(req: Request) {
     const formData = await req.formData();
     const file = formData.get('file') as File;
 
-    if (!file)
+    if (!file || file.size === 0)
         return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
 
-    const groqFormData = new FormData();
-    groqFormData.append('file', file);
-    groqFormData.append('model', speechToTextModelName);
-    groqFormData.append('response_format', 'json');
-    groqFormData.append('language', 'en');
-
     try {
-        const response = await fetch("https://api.groq.com/openai/v1/audio/transcriptions", {
+        const response = await fetch("https://zeyadcode-medscribe-backend.hf.space/transcribe", {
             method: "POST",
-            headers: {
-                'Authorization': `Bearer ${process.env.GROQ_SECRET_KEY}`,
-            },
-            body: groqFormData,
+            body: formData,
         });
+
         return NextResponse.json(await response.json());
     } catch (err) {
         console.log("Error calling Groq API in /api/transcribe: ", err)
