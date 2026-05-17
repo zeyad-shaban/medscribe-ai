@@ -1,4 +1,4 @@
-import { speechToTextModelName } from "@/src/lib/constants";
+import { TranscriptionResponseSchema } from "@/src/schemas/transcription"
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -14,7 +14,16 @@ export async function POST(req: Request) {
             body: formData,
         });
 
-        return NextResponse.json(await response.json());
+        const data = await response.json();
+        const validationResult = TranscriptionResponseSchema.safeParse(data);
+
+        if (!validationResult.success) {
+            console.error("Invalid transcription response format:", validationResult.error);
+            console.error("Received transcription response:", data);
+            return NextResponse.json({ error: "Invalid transcription response" }, { status: 500 });
+        }
+
+        return NextResponse.json(validationResult.data);
     } catch (err) {
         console.log("Error calling Groq API in /api/transcribe: ", err)
         return NextResponse.json({ error: "Failed to transcript audio" }, { status: 500 })
