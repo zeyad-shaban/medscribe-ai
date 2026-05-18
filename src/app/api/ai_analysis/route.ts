@@ -14,7 +14,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ message: "Unauthorized access" }, { status: 401 });
 
         // 2. Fetch User metadata to check subscription level
-        const isPremium = has({ permission: "unlimited_ai_analysis" });
+        const isPremium = has({ feature: "unlimited_ai_analysis" });
 
         if (!isPremium) {
             const identifier = `ratelimit_${userId}`;

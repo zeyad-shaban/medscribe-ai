@@ -8,10 +8,6 @@ export async function POST(req: Request) {
     if (!file || file.size === 0)
         return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
 
-    return NextResponse.json({
-        "transcript": "This is a dummy transcript. Replace this with actual transcription logic using your preferred speech-to-text API.",
-    })
-
     try {
         const response = await fetch("https://zeyadcode-medscribe-backend.hf.space/transcribe", {
             method: "POST",
