@@ -18,7 +18,7 @@ export async function POST(req: Request) {
             from: process.env.SMTP_USER,
             to: email,
             subject: subject,
-            html: `<p>${body}</p>`,
+            html: `${body}`,
         });
 
         return NextResponse.json({ success: true }, { status: 200 });

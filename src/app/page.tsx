@@ -19,26 +19,6 @@ const features = [
   },
 ];
 
-const subscriptions = [
-  {
-    plan_title: "Starter Plan",
-    price: "0$",
-    features: [
-      "Generates text from audio recordings",
-      "Basic transcript display",
-    ],
-  },
-  {
-    plan_title: "Premium User",
-    price: "Monthly: 10$  --    Yearly: 7$",
-    features: [
-      "Everything in Starter",
-      "AI-generated medical summary",
-      "Patient-friendly next steps",
-    ],
-  },
-];
-
 const steps = [
   "Record the conversation inside the browser.",
   "Turn speech into a structured transcript.",
